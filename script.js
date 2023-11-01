@@ -4,6 +4,7 @@ const checkboxcurto = document.querySelector(".app__card-button--curto");
 const checkboxlongo = document.querySelector(".app__card-button--longo");
 const img = document.querySelector(".app__image");
 const title = document.querySelector(".app__title");
+const buttons = document.querySelectorAll(".app__card-button");
 
 const messages = {
   foco: 'Otimize sua produtividade,<br /><strong class="app__title-strong">mergulhe no que importa.</strong>',
@@ -15,17 +16,23 @@ const messages = {
 
 checkboxfoco.addEventListener("click", () => {
   alterarContexto("foco");
+  checkboxfoco.classList.add("active");
 });
 
 checkboxcurto.addEventListener("click", () => {
   alterarContexto("descanso-curto");
+  checkboxcurto.classList.add("active");
 });
 
 checkboxlongo.addEventListener("click", () => {
   alterarContexto("descanso-longo");
+  checkboxlongo.classList.add("active");
 });
 
 function alterarContexto(contexto) {
+  buttons.forEach((contexto) => {
+    contexto.classList.remove("active");
+  });
   html.setAttribute("data-contexto", contexto);
   img.setAttribute("src", `/imagens/${contexto}.png`);
   title.innerHTML = messages[contexto];
