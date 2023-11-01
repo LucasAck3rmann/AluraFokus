@@ -8,6 +8,10 @@ const longoBt = document.querySelector(".app__card-button--longo");
 const botoes = document.querySelectorAll(".app__card-button");
 const startPauseBt = document.querySelector("#start-pause");
 const iniciarOuPausarBt = document.querySelector("#start-pause span");
+const iniciarOuPausarBtIcone = document.querySelector(
+  ".app__card-primary-button-icon"
+);
+const tempoNaTela = document.querySelector("#timer");
 
 //img
 const banner = document.querySelector(".app__image");
@@ -26,14 +30,30 @@ const audioTempoFinalizado = new Audio("./sons/beep.mp3");
 let tempoDecorridoEmSegundos = 5;
 let intervaloId = null;
 
-musica.loop = true;
-
 musicaFocoInput.addEventListener("change", () => {
   if (musica.paused) {
     musica.play();
   } else {
     musica.pause();
   }
+});
+
+focoBt.addEventListener("click", () => {
+  tempoDecorridoEmSegundos = 1500;
+  alterarContexto("foco");
+  focoBt.classList.add("active");
+});
+
+curtoBt.addEventListener("click", () => {
+  tempoDecorridoEmSegundos = 300;
+  alterarContexto("descanso-curto");
+  curtoBt.classList.add("active");
+});
+
+longoBt.addEventListener("click", () => {
+  tempoDecorridoEmSegundos = 900;
+  alterarContexto("descanso-longo");
+  longoBt.classList.add("active");
 });
 
 const messages = {
@@ -44,39 +64,24 @@ const messages = {
     'Hora de voltar à superfície,<br /><strong class="app__title-strong">Faça uma pausa longa. </strong>',
 };
 
-focoBt.addEventListener("click", function () {
-  alterarContexto("foco");
-  focoBt.classList.add("active");
-});
-
-curtoBt.addEventListener("click", () => {
-  alterarContexto("descanso-curto");
-  curtoBt.classList.add("active");
-});
-
-longoBt.addEventListener("click", () => {
-  alterarContexto("descanso-longo");
-  longoBt.classList.add("active");
-});
-
 function alterarContexto(contexto) {
-  buttons.forEach((contexto) => {
+  mostrarTempo();
+  botoes.forEach(function (contexto) {
     contexto.classList.remove("active");
   });
   html.setAttribute("data-contexto", contexto);
-  img.setAttribute("src", `/imagens/${contexto}.png`);
+  banner.setAttribute("src", `/imagens/${contexto}.png`);
   titulo.innerHTML = messages[contexto];
 }
-
 const contagemRegressiva = () => {
   if (tempoDecorridoEmSegundos <= 0) {
-    //audioTempoFinalizado.play();
+    audioTempoFinalizado.play();
     alert("Tempo finalizado!");
     zerar();
     return;
   }
   tempoDecorridoEmSegundos -= 1;
-  console.log("Temporizador: " + tempoDecorridoEmSegundos);
+  mostrarTempo();
 };
 
 startPauseBt.addEventListener("click", iniciarOuPausar);
@@ -89,9 +94,24 @@ function iniciarOuPausar() {
   }
   audioPlay.play();
   intervaloId = setInterval(contagemRegressiva, 1000);
+  iniciarOuPausarBt.textContent = "Pausar";
+  iniciarOuPausarBtIcone.setAttribute("src", `/imagens/pause.png`);
 }
 
 function zerar() {
   clearInterval(intervaloId);
+  iniciarOuPausarBt.textContent = "Começar";
+  iniciarOuPausarBtIcone.setAttribute("src", `/imagens/play_arrow.png`);
   intervaloId = null;
 }
+
+function mostrarTempo() {
+  const tempo = new Date(tempoDecorridoEmSegundos * 1000);
+  const tempoFormatado = tempo.toLocaleTimeString("pt-Br", {
+    minute: "2-digit",
+    second: "2-digit",
+  });
+  tempoNaTela.innerHTML = `${tempoFormatado}`;
+}
+
+mostrarTempo();
