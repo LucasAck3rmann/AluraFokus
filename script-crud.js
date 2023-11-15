@@ -25,24 +25,29 @@ const taskIconSvg = `
 </svg>
 `;
 function createTask(tarefa) {
-  const list = document.createElement("li");
+  const li = document.createElement("li");
   li.classList.add("app__section-task-list-item");
 
   const svgIcon = document.createElement("svg");
   svgIcon.innerHTML = taskIconSvg;
 
-  const py = document.createElement("p");
+  const paragraph = document.createElement("p");
   paragraph.classList.add("app__section-task-list-item-description");
 
   paragraph.textContent = tarefa.descricao;
 
   li.appendChild(svgIcon);
-  li.appendChild(py);
+  li.appendChild(paragraph);
 
-  return list;
+  return li;
 }
 
 tarefas.forEach((task) => {
   const taskItem = createTask(task);
   taskListContainer.appendChild(taskItem);
+});
+
+toggleFormTaskBtn.addEventListener("click", () => {
+  formLabel.textContent = "Adicionando Tarefa";
+  formTask.classList.toggle("hidden");
 });
