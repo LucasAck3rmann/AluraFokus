@@ -29,7 +29,7 @@ function criarElemento(tarefa) {
     const botao = document.createElement('button');
     botao.classList.add('app_button-edit');
     const imagemBotao = document.createElement('img');
-    imagemBotao.setAttribute('src', '/imagens/edit.png');
+    imagemBotao.setAttribute('src', 'imagens/edit.png');
 
     botao.onclick = () => {
         const novoTexto = prompt('Digite o novo texto da tarefa');
